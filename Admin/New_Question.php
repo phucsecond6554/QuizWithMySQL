@@ -7,7 +7,17 @@
 		integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
 		crossorigin="anonymous">
 
-		<link rel="stylesheet" href="style1.css">
+		<style media="screen">
+			fieldset{
+				margin-top: 15px;
+				box-shadow: 5px 5px 2px #888888;
+				padding: 5px;
+			}
+
+			input[type=submit], button{
+				margin-top: 30px;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="container">

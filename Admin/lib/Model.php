@@ -35,17 +35,19 @@
 
       $sql .= $keys.') value('.$values.')';
 
-      echo $sql;
-
       $query = mysqli_query($this->conn, $sql);
       return $query; //
     } // Create function: insert data into table
 
-    public function get_where($where = null){
+    public function get_where($where = null, $order = null){
       if($where !== null){
         $sql = 'Select * from '.$this->table.' where '.$where;
       }else {
         $sql = 'Select * from '.$this->table;
+      }
+
+      if($order !== null){
+        $sql .= ' Order by '.$order;
       }
 
       $query = mysqli_query($this->conn, $sql);
