@@ -1,13 +1,30 @@
 <?php
   require_once('Admin/lib/Question.php');
   require_once('Admin/lib/Answer.php');
+  session_start();
 
-  $question_set = 7;
+  unset($_SESSION['question']); // Reset lai cau hoi va cau tra loi
+  unset($_SESSION['answer']);
+
+  if(isset($_GET['QS'])){
+    $question_set = $_GET['QS'];
+  }else {
+    die('Chon question set phu hop');
+  }
 
   $question_model = new Question();
   $answer_model = new Answer();
 
-  $question_data = $question_model->get_where('question_set = 7');
+  $question_data = $question_model->get_where('question_set = '.$question_set,'rand()');
+
+  if(count($question_data) == 0){
+    die('Hien tai bo de chua co cau hoi');
+  }
+
+  foreach($question_data as $qs_data){
+    $_SESSION['question'][] = $qs_data; // Lay question data
+    $_SESSION['answer'][] = $answer_model->get_where('question_id = '. $qs_data['id'], 'rand()'); // Lay cau tra loi
+  }
  ?>
 
 <!DOCTYPE html>
@@ -18,22 +35,19 @@
   </head>
   <body>
     <form action="Result.php" method="post">
-      <?php foreach($question_data as $question){?>
-        <h5><?php echo $question['question'] ?></h5>
+      <?php
+        $data_length = count($_SESSION['question']); // Dem tong so cau hoi
 
-        <ul>
-          <?php
-              $answer_data = $answer_model->get_where('question_id = '.$question['id'], 'rand()');
+        for($i = 0 ; $i < $data_length ; $i++){ // In cau hoi
+      ?>
+        <h5><?php echo 'Cau hoi '.($i+1).': '. $_SESSION['question'][$i]['question'] ?></h5>
 
-              foreach($answer_data as $answer){
-          ?>
-            <li>
-              <input type="radio" name="<?php echo $question['id']?>" value="<?php echo $answer['id']?>">
-              <?php echo $answer['answer'] ?>
-            </li>
-          <?php  } ?>
-        </ul>
-      <?php } // Question?>
+        <?php foreach($_SESSION['answer'][$i] as $answer){ // Cau tra loi?>
+          <input type="radio" name="<?php echo $i?>" value="<?php echo $answer['id'] ?>">
+          <i><?php echo $answer['answer'] ?></i><br>
+        <?php } // IN cau tra loi ?>
+
+      <?php } // IN ra cau hoi?>
 
       <input type="submit" name="" value="Nop bai">
     </form>
