@@ -24,7 +24,7 @@
         <tr>
           <td><?php echo $value['id']; ?></td>
           <td><?php echo $value['name']; ?></td>
-          <td><a href="<?php echo 'New_Question.php?QS='.$value['id'] ?>">Them cau hoi</a></td>
+          <td><a href="<?php echo 'New_Question_new.php?QS='.$value['id'] ?>">Them cau hoi</a></td>
         </tr>
       <?php } ?>
     </table>

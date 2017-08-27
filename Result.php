@@ -4,6 +4,16 @@
 
   $data_length = count($_SESSION['question']);
 
+  $point = 0;
+
+  for($i = 0 ; $i < $data_length ; $i++){
+    foreach($_SESSION['answer'][$i] as $answer){
+      if($_POST[$i] == $answer['id'] && $answer['is_right'] == true){
+        $point++;
+      }
+    }
+  }
+
  ?>
 
 <!DOCTYPE html>
@@ -23,7 +33,10 @@
     </style>
   </head>
   <body>
+    <h1>Ban lam dung <?php echo $point ?> cau</h1>
+
     <?php
+
     for($i = 0 ; $i < $data_length ; $i++){
       echo 'Cau hoi '.($i + 1).': '.$_SESSION['question'][$i]['question'].'<br>';
 

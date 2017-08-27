@@ -72,6 +72,18 @@
 
       return $row['max_id'];
     }
+
+    public function delete_where($where = null){
+      if($where !== null){
+        $sql = 'Delete from '.$this->table.' where '.$where;
+      }else {
+        $sql = 'Delete from '.$this->table;
+      }
+
+      $query = mysqli_query($this->conn, $sql);
+
+      return $query;
+    }
   }
 
  ?>
