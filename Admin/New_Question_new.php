@@ -46,7 +46,7 @@
       <div class="row">
         <div class="col-7 question_form">
           <form id="question_form" action="index.html" method="post">
-            <h1 class="text-center">Them cau hoi</h1>
+            <h1 id="title" class="text-center">Them cau hoi</h1>
 
             <div class="form-group">
               <label for="Question_Set">Question Set</label>
@@ -56,27 +56,27 @@
 
             <div class="form-group">
               <label for="question">Question</label>
-              <textarea name="question" rows="5" cols="80" class="form-control"></textarea>
+              <textarea name="question" id="question" rows="5" cols="80" class="form-control"></textarea>
             </div> <!-- Question-->
 
             <div class="form-group">
               <label for="answer">Cau tra loi dung</label>
-              <input type="text" name="right_answer" placeholder="Cau tra loi dung" class="form-control">
+              <input type="text" name="right_answer" id="right_answer" placeholder="Cau tra loi dung" class="form-control">
             </div>
 
             <div class="form-group">
               <label for="answer">Cau tra loi sai 1</label>
-              <input type="text" name="answer[]" placeholder="Cau tra loi sai 1" class="form-control">
+              <input type="text" name="answer[]" placeholder="Cau tra loi sai 1" class="form-control wrong_answer">
             </div>
 
             <div class="form-group">
               <label for="answer">Cau tra loi sai 2</label>
-              <input type="text" name="answer[]" placeholder="Cau tra loi sai 2" class="form-control">
+              <input type="text" name="answer[]" placeholder="Cau tra loi sai 2" class="form-control wrong_answer">
             </div>
 
             <div class="form-group">
               <label for="answer">Cau tra loi sai 3</label>
-              <input type="text" name="answer[]" placeholder="Cau tra loi sai 3" class="form-control">
+              <input type="text" name="answer[]" placeholder="Cau tra loi sai 3" class="form-control wrong_answer">
             </div>
 
             <button type="button" name="add_question" class="btn btn-primary" id="add_btn">Them cau hoi</button>
@@ -96,8 +96,8 @@
             <?php foreach($question_data as $question){ ?>
               <tr>
                 <td><?php echo $question['question'] ?></td>
-                <td><a href="<?php echo $question['id'] ?>" class="btn btn-warning">Edit</a></td>
-                <td><a href="<?php echo 'proccess/Delete_Question.php?id='.$question['id'] ?>" class="btn btn-danger">Delete</a></td>
+                <td><a href="<?php echo 'proccess/Edit_Question.php?id='.$question['id'] ?>" class="btn btn-warning edit_btn">Edit</a></td>
+                <td><a href="<?php echo 'proccess/Delete_Question.php?id='.$question['id'] ?>" class="btn btn-danger delete_btn">Delete</a></td>
               </tr>
             <?php } ?>
           </table>

@@ -84,6 +84,26 @@
 
       return $query;
     }
+
+    public function update($data ,$where = null){
+      $set = ' Set ';
+
+      foreach($data as $key => $value){
+        $set .= "$key = '$value',";
+      }
+
+      $set = trim($set, ",");
+
+      $sql = 'Update '.$this->table.$set;
+
+      if($where !== null){
+        $sql .= ' Where '.$where;
+      }
+
+      $query = mysqli_query($this->conn, $sql);
+
+      return $query;
+    } // Function update
   }
 
  ?>
