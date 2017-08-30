@@ -1,134 +1,116 @@
+<?php
+  require('lib/Question.php');
+  require('lib/Question_Set.php');
+
+  $qs_model = new Question();
+  $question_set_model = new Question_Set();
+
+  if(isset($_GET['QS'])){
+    $question_set = $_GET['QS'];
+    $question_set_data = $question_set_model->get_where('id = '.$question_set);
+
+    $question_set_name = $question_set_data[0]['name'];
+  }else {
+    die('Chon sai question set');
+  }
+
+  $question_data = $qs_model->get_where('question_set = '.$question_set); // Lay danh sach cau hoi
+ ?>
+
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title></title>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-		integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
-		crossorigin="anonymous">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
 
-		<style media="screen">
-			fieldset{
-				margin-top: 15px;
-				box-shadow: 5px 5px 2px #888888;
-				padding: 5px;
-			}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+    integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+    crossorigin="anonymous">
 
-			input[type=submit], button{
-				margin-top: 30px;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-			<form action="proccess/New_Question.php" method="post">
+    <style media="screen">
+      *{
+        box-sizing: border-box;
+      }
 
-				<div id="form-block">
-					<fieldset>
-						<legend>Question 1</legend>
-						<div class="Question_Block">
-							<div class="Answer_Block" id="QS_1">
-								<div class="form-group">
-									<label>Question</label>
-									<input type="text" name="q1" class="form-control">
-								</div>
+      .question_form{
+        border: 1px solid black;
+      }
 
-								<div class="form-group">
-									<label>Cau tra loi dung</label>
-									<input type="text" name="a1_right" class="form-control">
-								</div>
+      .question_list{
+        border: 1px solid pink;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-7 question_form">
+          <form id="question_form" action="index.html" method="post">
+            <h1 id="title" class="text-center">Them cau hoi</h1>
 
-								<div class="form-group">
-									<label>Cau tra loi con lai</label>
-									<input type="text" name="a1[]" class="form-control">
-								</div>
-							</div> <!--Answer Block-->
-							<button type="button" class="Add_Answer_Btn btn btn-primary" btn-target="QS_1">Them cau tra loi</button>
-						</div> <!--Question Block-->
-					</fieldset>
-				</div> <!--Form Block -->
+            <div class="form-group">
+              <label for="Question_Set">Question Set</label>
+              <input type="text" value="<?php echo $question_set_name ?>" class="form-control" disabled>
+              <input type="hidden" name="question_set" id="question_set" value="<?php echo $question_set ?>">
+            </div>
 
-				<input type="hidden" name="Question_Set" value="<?php echo $_GET['QS'] ?>">
+            <div class="form-group">
+              <label for="question">Question</label>
+              <textarea name="question" id="question" rows="5" cols="80" class="form-control"></textarea>
+            </div> <!-- Question-->
 
-				<input type="submit" class="btn btn-default" value="Submit">
-			</form>
+            <div class="form-group">
+              <label for="answer">Cau tra loi dung</label>
+              <input type="text" name="right_answer" id="right_answer" placeholder="Cau tra loi dung" class="form-control">
+            </div>
 
-			<button type="button" name="button" id="new_btn">Them cau hoi</button>
-		</div> <!--Container-->
+            <div class="form-group">
+              <label for="answer">Cau tra loi sai 1</label>
+              <input type="text" name="answer[]" placeholder="Cau tra loi sai 1" class="form-control wrong_answer">
+            </div>
 
+            <div class="form-group">
+              <label for="answer">Cau tra loi sai 2</label>
+              <input type="text" name="answer[]" placeholder="Cau tra loi sai 2" class="form-control wrong_answer">
+            </div>
 
-	</body>
+            <div class="form-group">
+              <label for="answer">Cau tra loi sai 3</label>
+              <input type="text" name="answer[]" placeholder="Cau tra loi sai 3" class="form-control wrong_answer">
+            </div>
 
-	<script
-  src="http://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
+            <button type="button" name="add_question" class="btn btn-primary" id="add_btn">Them cau hoi</button>
+          </form>
+        </div> <!--Question Form-->
 
+        <div class="col-5 question_list">
+          <h1 class="text-center">Danh sach cau hoi</h1>
 
-	<script>
-		var current_question = 1; // Cau hoi hien tai
+          <table class="table" id="question_table">
+            <tr>
+              <th>Cau hoi</th>
+              <th>Sua</th>
+              <th>Xoa</th>
+            </tr>
 
-		function add_answer(index, item){
-			let target = $(item).attr("btn-target"); // Lay muc tieu cua nut
+            <?php foreach($question_data as $question){ ?>
+              <tr>
+                <td><?php echo $question['question'] ?></td>
+                <td><a href="<?php echo 'proccess/Edit_Question.php?id='.$question['id'] ?>" class="btn btn-warning edit_btn">Edit</a></td>
+                <td><a href="<?php echo 'proccess/Delete_Question.php?id='.$question['id'] ?>" class="btn btn-danger delete_btn">Delete</a></td>
+              </tr>
+            <?php } ?>
+          </table>
+        </div> <!--Bang cau hoi-->
+      </div> <!-- Row -->
+    </div> <!--Contrainer-->
 
-			let answer_name = "a" + (index + 1) + "[]";
-			let answer_template = `<div class="form-group">
-				<label>Cau tra loi con lai</label>
-				<input type="text" name="${answer_name}" class="form-control">
-			</div>`;
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous">
+    </script>
 
-			$("#" + target).append(answer_template);
-			console.log("Bla");
-		} // Function add_answer
-///////////////////////////////////////////////
-
-	$(".Add_Answer_Btn").each(function(index, item){
-		$(item).click(function(){
-			add_answer(index, item);
-		});
-	}); // Them mot cau tra loi moi
-
-		add_answer();
-
-		$("#new_btn").click(function(){
-			current_question += 1;
-			let answer_block_id = "QS_" + current_question;
-			let q_id = "q" + current_question;
-			let right_answer_name = "a" + current_question + "_right";
-			let anwser_name = "a" + current_question + "[]";
-			let target = "QS_" + current_question;
-
-			var qs_template = `<fieldset>
-			<legend>Question ${current_question} </legend>
-			<div class="Question_Block">
-				<div class="Answer_Block" id="${answer_block_id}">
-					<div class="form-group">
-						<label>Question</label>
-						<input type="text" name="${q_id}" class="form-control">
-					</div>
-
-					<div class="form-group">
-						<label>Cau tra loi dung</label>
-						<input type="text" name="${right_answer_name}" class="form-control">
-					</div>
-
-					<div class="form-group">
-						<label>Cau tra loi con lai</label>
-						<input type="text" name="${anwser_name}" class="form-control">
-					</div>
-				</div>
-				<button type="button" class="Add_Answer_Btn btn btn-primary" btn-target="${target}">Them cau tra loi</button>
-			</div> </fieldset>`;
-
-			$("#form-block").append(qs_template);
-
-			let new_item = $(".Add_Answer_Btn");
-
-			$(new_item[current_question - 1]).click(function(){
-				add_answer(current_question - 1, new_item[current_question - 1]);
-			});
-		});
-
-
-	</script>
+    <script src="js/New_Question.js"></script>
+  </body>
 </html>

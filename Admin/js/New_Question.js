@@ -144,38 +144,6 @@ function edit_question(url){
     });
 }; // Function edit_question
 
-/*function delete_dom_btn(){
-  $("#question_table").on("click", ".delete_btn", function(event){
-    event.preventDefault();
-
-    if(confirm("Ban co chac la muon xoa")){
-      delete_question($(this).attr("href"));
-    }
-  }); // Nut delete
-} // Add event delete button
-
-function edit_dom_btn(){
-  $("#question_table").on("click", ".edit_btn" , function(event){
-    event.preventDefault();
-
-    get_question($(this).attr("href"));
-
-    if(mode != "edit"){
-      $("#title").text("Chinh sua cau hoi");
-      var cancel_btn = $("<button></button>");
-      $(cancel_btn).text("Cancel");
-      $(cancel_btn).attr("id", "cancel_btn");
-      $(cancel_btn).attr("class", "btn btn-default");
-
-      $("#question_form").append(cancel_btn);
-
-      mode = "edit";
-    }
-
-
-  }); // Nut edit
-} */// Add event edit button
-
 $(document).ready(function(){
   $("#add_btn").click(function(event){
     event.preventDefault();

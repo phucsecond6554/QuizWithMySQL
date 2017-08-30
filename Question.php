@@ -1,5 +1,6 @@
 <?php
   require_once('Admin/lib/Question.php');
+  require_once('Admin/lib/Question_Set.php');
   require_once('Admin/lib/Answer.php');
   session_start();
 
@@ -14,6 +15,7 @@
 
   $question_model = new Question();
   $answer_model = new Answer();
+  $question_set_model = new Question_Set();
 
   $question_data = $question_model->get_where('question_set = '.$question_set,'rand()');
 
@@ -34,6 +36,12 @@
     <title></title>
   </head>
   <body>
+    <h1>
+      <?php
+        $qs_name = $question_set_model->get_where('id = '.$question_set);
+        echo 'Bo de: '.$qs_name[0]['name'];
+      ?>
+    </h1>
     <form action="Result.php" method="post">
       <?php
         $data_length = count($_SESSION['question']); // Dem tong so cau hoi
